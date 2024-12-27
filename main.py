@@ -19,12 +19,12 @@ class IPCalculator(QMainWindow):
         # This centers the background image - learned this from my UI design course
         background = QPixmap('background_texture.jpg')
 
-        # Need to do some math to find the exact center point of the window
+        # Dividing by 2 gives us the center point of both width and height, which is the center of the generated window
         x = (background.width() - self.width()) // 2
         y = (background.height() - self.height()) // 2
         centered_background = background.copy(x, y, self.width(), self.height())
 
-        # Setting up the background - took me a while to understand how palettes work
+        # Setting up the background
         palette = QPalette()
         palette.setBrush(QPalette.Window, QBrush(centered_background))
         self.setPalette(palette)
