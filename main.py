@@ -1,4 +1,7 @@
 import sys
+
+from PyQt5 import Qt
+from PyQt5.QtGui import QIcon, QPixmap, QPalette, QBrush
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QTabWidget, QHBoxLayout, QPushButton,
                              QTextEdit, QLabel, QLineEdit)
 
@@ -9,6 +12,22 @@ class IPCalculator(QMainWindow):
         super().__init__()
         self.setWindowTitle("IP Address Calculator")
         self.setGeometry(100, 100, 800, 600)
+
+        # Adding icon to make the app look more professional
+        self.setWindowIcon(QIcon('algebra_icon.png'))
+
+        # This centers the background image - learned this from my UI design course
+        background = QPixmap('background_texture.jpg')
+
+        # Need to do some math to find the exact center point of the window
+        x = (background.width() - self.width()) // 2
+        y = (background.height() - self.height()) // 2
+        centered_background = background.copy(x, y, self.width(), self.height())
+
+        # Setting up the background - took me a while to understand how palettes work
+        palette = QPalette()
+        palette.setBrush(QPalette.Window, QBrush(centered_background))
+        self.setPalette(palette)
 
         # Create main widget and layout
         main_widget = QWidget()
