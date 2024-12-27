@@ -80,7 +80,7 @@ class IPCalculator(QMainWindow):
         # Add tabs
         tabs.addTab(ip_tab, "IP Calculator")
         tabs.addTab(binary_tab, "Binary Conversion")
-        tabs.addTab(device_tab, "Hosts to Netowork Calculator")
+        tabs.addTab(device_tab, "Hosts to Network Calculator")
 
         # Buttons for each tab
         # IP Calculator buttons
