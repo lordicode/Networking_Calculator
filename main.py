@@ -3,7 +3,7 @@ import sys
 from PyQt5 import Qt
 from PyQt5.QtGui import QIcon, QPixmap, QPalette, QBrush
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QTabWidget, QHBoxLayout, QPushButton,
-                             QTextEdit, QLabel, QLineEdit)
+                             QTextEdit, QLabel, QLineEdit, QMessageBox)
 
 
 
@@ -80,6 +80,12 @@ class IPCalculator(QMainWindow):
         device_layout.addWidget(QLabel("Number of hosts:"))
         device_layout.addWidget(self.devices_input)
         device_tab.setStyleSheet("background: rgba(255, 255, 255, 200);")  # White with some transparency
+        
+        # Device calculator button
+        device_buttons = QHBoxLayout()
+        self.calculate_subnet_btn = QPushButton("Calculate Required Subnet")
+        device_buttons.addWidget(self.calculate_subnet_btn)
+        device_layout.addLayout(device_buttons)
 
         # Add tabs
         tabs.addTab(ip_tab, "IP Calculator")
@@ -111,18 +117,40 @@ class IPCalculator(QMainWindow):
         self.calculate_btn.clicked.connect(self.calculate)
         self.to_decimal_btn.clicked.connect(self.binary_to_decimal)
         self.to_binary_btn.clicked.connect(self.decimal_to_binary)
-        self.ip_input.textChanged.connect(self.validate_ip)
+        self.calculate_subnet_btn.clicked.connect(self.calculate_from_devices)
 
-    def validate_ip(self):
-        return
     def binary_to_decimal(self):
+        self.result_display.setText("decimal") # placeholder
         return
 
     def decimal_to_binary(self):
+        # Show the result
+        self.result_display.setText("binary") # placeholder
         return
 
+    # TODO: Add validation for the IP address and subnet mask
     def calculate(self):
-        return
+        try:
+            # Get inputs from the user
+            ip = self.ip_input.text()
+            mask = self.mask_input.text()
+
+            # Check if the mask is in CIDR notation
+            if '/' in mask:
+                full_ip = ip + mask
+            else:
+                full_ip = ip + '/' + mask
+
+            # Show the result
+            self.result_display.setText(full_ip)
+
+        except ValueError as error:
+            # Show an error message
+            QMessageBox.warning(self, "Error", str(error))
+
+    def calculate_from_devices(self):
+            self.result_display.setText("result")# placeholder
+
 
 
 if __name__ == '__main__':
