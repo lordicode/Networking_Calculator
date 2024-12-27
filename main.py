@@ -68,9 +68,19 @@ class IPCalculator(QMainWindow):
         binary_layout.addWidget(QLabel("Decimal IP:"))
         binary_layout.addWidget(self.decimal_input)
 
-       # Add tabs
+        # Tab 3: Device Calculator
+        device_tab = QWidget()
+        device_layout = QVBoxLayout(device_tab)
+
+        self.devices_input = QLineEdit()
+        self.devices_input.setPlaceholderText("Enter number of hosts needed")
+        device_layout.addWidget(QLabel("Number of hosts:"))
+        device_layout.addWidget(self.devices_input)
+
+        # Add tabs
         tabs.addTab(ip_tab, "IP Calculator")
         tabs.addTab(binary_tab, "Binary Conversion")
+        tabs.addTab(device_tab, "Hosts to Netowork Calculator")
 
         # Buttons for each tab
         # IP Calculator buttons
@@ -87,8 +97,9 @@ class IPCalculator(QMainWindow):
         binary_buttons.addWidget(self.to_binary_btn)
         binary_layout.addLayout(binary_buttons)
 
-        #Result display
+        # Result display
         self.result_display = QTextEdit()
+        # This will only display text, so we set it to be read only
         self.result_display.setReadOnly(True)
         layout.addWidget(self.result_display)
 
