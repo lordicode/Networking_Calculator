@@ -31,6 +31,7 @@ class IPCalculator(QMainWindow):
 
         # Create main widget and layout
         main_widget = QWidget()
+        main_widget.setStyleSheet("background: rgba(255, 255, 255, 200);")  # White with some transparency
         self.setCentralWidget(main_widget)
         layout = QVBoxLayout(main_widget)
 
@@ -51,6 +52,7 @@ class IPCalculator(QMainWindow):
 
         ip_layout.addWidget(QLabel("IP Address:"))
         ip_layout.addWidget(self.ip_input)
+        ip_tab.setStyleSheet("background: rgba(255, 255, 255, 200);")  # White with some transparency
         ip_layout.addWidget(QLabel("Subnet Mask:"))
         ip_layout.addWidget(self.mask_input)
 
@@ -67,6 +69,7 @@ class IPCalculator(QMainWindow):
         binary_layout.addWidget(self.binary_input)
         binary_layout.addWidget(QLabel("Decimal IP:"))
         binary_layout.addWidget(self.decimal_input)
+        binary_tab.setStyleSheet("background: rgba(255, 255, 255, 200);")  # White with some transparency
 
         # Tab 3: Device Calculator
         device_tab = QWidget()
@@ -76,6 +79,7 @@ class IPCalculator(QMainWindow):
         self.devices_input.setPlaceholderText("Enter number of hosts needed")
         device_layout.addWidget(QLabel("Number of hosts:"))
         device_layout.addWidget(self.devices_input)
+        device_tab.setStyleSheet("background: rgba(255, 255, 255, 200);")  # White with some transparency
 
         # Add tabs
         tabs.addTab(ip_tab, "IP Calculator")
