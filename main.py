@@ -117,13 +117,21 @@ class IPCalculator(QMainWindow):
         self.ip_input.textChanged.connect(self.on_ip_input_changed)
 
     def is_valid_ipv4(self, address):
+        """
+        An IPv4 address is valid if:
+        1. It contains exactly 4 parts separated by dots
+        2. Each part is a number between 0 and 255
+        3. No empty parts or non-numeric values are allowed"""
         try:
             parts = address.split(".")
             if len(parts) != 4:
                 return False
-            if 255 < parts <= 0:
-                return False
-        except (AttributeError, TypeError, ValueError):
+            for part in parts:
+                num = int(part)
+                if num < 0 or num > 255:
+                    return False
+            return True
+        except:
             return False
 
     def ip_to_binary(self, ip):
@@ -145,6 +153,11 @@ class IPCalculator(QMainWindow):
         return
 
     def on_ip_input_changed(self):
+        """
+        Serves as a simple visual mechanim, adds a visual flare.
+        If the IP address is valid, the background turns light green.
+        If invalid, the background turns light red.
+        """
         text = self.ip_input.text().strip()
         if self.is_valid_ipv4(text):
             self.ip_input.setStyleSheet("background-color: #b3ffb3;")  # light green
