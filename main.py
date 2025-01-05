@@ -152,10 +152,12 @@ class IPCalculator(QMainWindow):
         return
 
     def smallest_power_of_2(self, n):
+        exponent = 0
         power = 1
         while power < n:
             power *= 2
-        return power
+            exponent += 1
+        return power, exponent
 
     def calculate_from_devices(self):
         """
@@ -164,7 +166,9 @@ class IPCalculator(QMainWindow):
         """
         # Get the entered number of hosts
         entered_number = int(self.devices_input.text())
-        result = self.smallest_power_of_2(entered_number)
+        potential_hosts, exponent = self.smallest_power_of_2(entered_number)
+        cidr = 32 - exponent
+        result = f"The subnet needed is /{cidr}. It can accommodate up to {potential_hosts} potential hosts."
         self.result_display.setText(str(result))
         return
 
