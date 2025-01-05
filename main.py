@@ -118,10 +118,12 @@ class IPCalculator(QMainWindow):
 
     def is_valid_ipv4(self, address):
         """
+        Validates the IP address as all other calculations do not matter if the value entered is not allowed.
         An IPv4 address is valid if:
         1. It contains exactly 4 parts separated by dots
         2. Each part is a number between 0 and 255
-        3. No empty parts or non-numeric values are allowed"""
+        3. No empty parts or non-numeric values are allowed
+        """
         try:
             parts = address.split(".")
             if len(parts) != 4:
@@ -149,7 +151,21 @@ class IPCalculator(QMainWindow):
     def calculate(self):
         return
 
+    def smallest_power_of_2(self, n):
+        power = 1
+        while power < n:
+            power *= 2
+        return power
+
     def calculate_from_devices(self):
+        """
+        Subnet / can be found by finding the lowest power of 2 that can accommodate the entered number of devices
+        and subtracting the found power from 32
+        """
+        # Get the entered number of hosts
+        entered_number = int(self.devices_input.text())
+        result = self.smallest_power_of_2(entered_number)
+        self.result_display.setText(str(result))
         return
 
     def on_ip_input_changed(self):
