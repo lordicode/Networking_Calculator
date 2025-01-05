@@ -154,7 +154,7 @@ class IPCalculator(QMainWindow):
 
     def on_ip_input_changed(self):
         """
-        Serves as a simple visual mechanim, adds a visual flare.
+        Serves as a simple visual mechanism, adds a visual flare.
         If the IP address is valid, the background turns light green.
         If invalid, the background turns light red.
         """
