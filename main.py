@@ -151,12 +151,14 @@ class IPCalculator(QMainWindow):
         2. Each part is in a set of 01
         3. No empty parts, no symbols outside 01,non-numeric values are allowed
         """
+        print(address)
         try:
             parts = address.split(".")
+            print(parts)
             if len(parts) != 4:
                 return False
             for part in parts:
-                binary_digit = string(part)
+                binary_digit = str(part)
                 if not set(binary_digit).issubset({'0', '1'}) or len(part) != 8:
                     return False
             return True
@@ -166,7 +168,7 @@ class IPCalculator(QMainWindow):
 
     def binary_to_decimal(self):
         """
-        Convert a dotted-binary IPv4 string with 32 bists
+        Convert a dotted-binary IPv4 string with 32 bits
         back into dotted-decimal form (192.168.1.10).
 
         Logic:
