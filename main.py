@@ -274,6 +274,7 @@ class IPCalculator(QMainWindow):
             f"Network Address: {'.'.join(str(x) for x in network)}\n"
             #incorrect for now
             f"First Usable IP: {'.'.join(str(x) for x in first_ip)}\n"
+            #incorrect for now
             f"Last Usable IP: {'.'.join(str(x) for x in last_ip)}\n"
             f"Broadcast Address: {'.'.join(str(x) for x in broadcast)}"
         )
