@@ -266,14 +266,16 @@ class IPCalculator(QMainWindow):
         broadcast = [network[i] | (255 - mask_parts[i]) for i in range(4)] # we are effectively flipping the bits leaving us with only host bits
 
         # Get first and last IPs, as the target variables are arrays we need to copy from arrays
-        first_ip = network[:]
-        last_ip = broadcast[:]
+        first_ip_full = network[:]
+        first_ip_full[3] += 1  # Increment the last octet to get the first usable address
+        last_ip = broadcast[:]  # Copy the broadcast address
+        last_ip[3] -= 1  # Decrement the last octet by 1 to get the last usable as it always will be on the 4th octet
 
         # Create result
         result = (
             f"Network Address: {'.'.join(str(x) for x in network)}\n"
             #incorrect for now
-            f"First Usable IP: {'.'.join(str(x) for x in first_ip)}\n"
+            f"First Usable IP: {'.'.join(str(x) for x in first_ip_full)}\n"
             #incorrect for now
             f"Last Usable IP: {'.'.join(str(x) for x in last_ip)}\n"
             f"Broadcast Address: {'.'.join(str(x) for x in broadcast)}"
