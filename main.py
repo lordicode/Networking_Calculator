@@ -151,10 +151,8 @@ class IPCalculator(QMainWindow):
         2. Each part is in a set of 01
         3. No empty parts, no symbols outside 01,non-numeric values are allowed
         """
-        print(address)
         try:
             parts = address.split(".")
-            print(parts)
             if len(parts) != 4:
                 return False
             for part in parts:
