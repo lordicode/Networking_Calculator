@@ -222,9 +222,22 @@ class IPCalculator(QMainWindow):
 
     def calculate(self):
         """
-        Placeholder
+        Calculate and display the Network Address, First Usable IP Address,
+        Last Usable IP Address, and Broadcast Address based on the input IP
+        address and subnet mask.
         """
-        return
+        ip_v4 = self.ip_input.text().strip()
+        subnet_mask = self.mask_input.text().strip()
+
+        # Validate the IPv4 address
+        if not self.is_valid_ipv4(ip_v4):
+            self.result_display.setText("Invalid IPv4 address!")
+            return
+
+        # Validate the subnet mask format (must start with '/')
+        if not subnet_mask.startswith('/'):
+            self.result_display.setText("Subnet mask must be in CIDR notation (e.g., /24)!")
+            return
 
     def smallest_power_of_2(self, n):
         """
