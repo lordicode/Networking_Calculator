@@ -239,6 +239,47 @@ class IPCalculator(QMainWindow):
             self.result_display.setText("Subnet mask must be in CIDR notation (e.g., /24)!")
             return
 
+        # Subnet mask is always in CIDR notation, so without additional validation we take symbols after / as int
+        cidr = int(subnet_mask[1:])
+
+        # Convert IP to numbers
+        ip_parts = [int(x) for x in ip_v4.split('.')]
+
+        # Create subnet mask
+        mask_parts = [0, 0, 0, 0]
+        for i in range(4):
+            if cidr >= 8:
+                mask_parts[i] = 255
+                cidr -= 8
+            # If fewer than 8 "1" bits in octet, this means that the octet will be partial in the subnet mask
+            elif cidr > 0:
+                # If cidr = 5, then 256 - (2 ** (8 - 5)) = 256 - 2^3 = 256 - 8 = 248, which would make the first octet 11111000
+                mask_parts[i] = 256 - (2 ** (8 - cidr))
+                cidr = 0
+
+        # Calculate network and broadcast
+        # This is a bitwise AND operation it ensures that only bits commong to both the IP Address and the subnet mask are retained
+        # All bits outside of the matched ones will be set to zero, which gets us the network address
+        network = [ip_parts[i] & mask_parts[i] for i in range(4)]
+        # This performs bitwise OR
+        # The bitwise OR operation sets all the host bits to 1
+        broadcast = [network[i] | (255 - mask_parts[i]) for i in range(4)] # we are effectively flipping the bits leaving us with only host bits
+
+        # Get first and last IPs, as the target variables are arrays we need to copy from arrays
+        first_ip = network[:]
+        last_ip = broadcast[:]
+
+        # Create result
+        result = (
+            f"Network Address: {'.'.join(str(x) for x in network)}\n"
+            #incorrect for now
+            f"First Usable IP: {'.'.join(str(x) for x in first_ip)}\n"
+            f"Last Usable IP: {'.'.join(str(x) for x in last_ip)}\n"
+            f"Broadcast Address: {'.'.join(str(x) for x in broadcast)}"
+        )
+
+        self.result_display.setText(result)
+
     def smallest_power_of_2(self, n):
         """
         Serves as a simple iterative way to get the closest higher power of 2 (finds the subnet)
