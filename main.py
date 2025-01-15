@@ -1,6 +1,5 @@
 import sys
 
-import regex
 from PyQt5 import Qt
 from PyQt5.QtGui import QIcon, QPixmap, QPalette, QBrush
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QTabWidget, QHBoxLayout, QPushButton,
