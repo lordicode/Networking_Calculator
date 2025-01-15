@@ -1,11 +1,13 @@
 import sys
 
+import regex
 from PyQt5 import Qt
 from PyQt5.QtGui import QIcon, QPixmap, QPalette, QBrush
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QTabWidget, QHBoxLayout, QPushButton,
                              QTextEdit, QLabel, QLineEdit, QMessageBox)
 
 
+# noinspection PyUnresolvedReferences
 class IPCalculator(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -116,6 +118,11 @@ class IPCalculator(QMainWindow):
         self.calculate_subnet_btn.clicked.connect(self.calculate_from_devices)
         self.ip_input.textChanged.connect(self.on_ip_input_changed)
 
+    def clean_copied_input(self, string):
+        # Accept input and remove newline characters directly
+        clean_string = string.replace('\n', '')
+        return clean_string
+
     def is_valid_ipv4(self, address):
         """
         Validates the IP address as all other calculations do not matter if the value entered is not allowed.
@@ -136,22 +143,98 @@ class IPCalculator(QMainWindow):
         except:
             return False
 
-    def ip_to_binary(self, ip):
-        return
+    def is_valid_binary_ipv4(self, address):
+        """
+        Validates the IP address in binary notation as all other calculations do not matter if the value entered is not allowed.
+        An IPv4 address is valid in binary if:
+        1. It contains exactly 4 parts separated by dots
+        2. Each part is in a set of 01
+        3. No empty parts, no symbols outside 01,non-numeric values are allowed
+        """
+        try:
+            parts = address.split(".")
+            if len(parts) != 4:
+                return False
+            for part in parts:
+                binary_digit = string(part)
+                if not set(binary_digit).issubset({'0', '1'}) or len(part) != 8:
+                    return False
+            return True
+        except:
+            return False
 
-    def binary_to_ip(self, binary):
-        return
 
     def binary_to_decimal(self):
-        return
+        """
+        Convert a dotted-binary IPv4 string with 32 bists
+        back into dotted-decimal form (192.168.1.10).
+
+        Logic:
+        1. Split the binary address into four 8-bit parts by '.'
+        2. Convert each 8-bit part to an integer (base 2)
+        3. Convert each integer to a decimal string
+        4. Join the four decimal octets with '.'
+        """
+        binary_ip = self.binary_input.text()
+        if self.is_valid_binary_ipv4(binary_ip):
+            # Split into four parts, each part is an 8-bit binary number
+            parts = binary_ip.split(".")
+            decimal_parts = []
+
+            # Convert each part from binary to decimal
+            for part in parts:
+                number = int(part, 2)  # base 2 means interpret as binary
+                decimal_parts.append(str(number))
+
+            # Join the decimal octets to form a dotted-decimal IP
+            result = ".".join(decimal_parts)
+            self.result_display.setText(result)
+        else:
+            self.result_display.setText("Invalid binary notation!")
+
 
     def decimal_to_binary(self):
-        return
+        """
+        Convert a dotted-decimal IPv4 address ('192.168.1.10')
+        into a dotted-binary string.
+        Logic:
+        1. Split the IP into four octets by '.'
+        2. Convert each octet to an integer
+        3. Convert the integer to an 8-bit binary string with leading zeros if needed
+        4. Join the four binary octets with '.'
+        """
+
+        ip_decimal = self.decimal_input.text()
+        if self.is_valid_ipv4(ip_decimal):
+
+            # Split the IP address into four octets)
+            parts = ip_decimal.split(".")
+            binary_parts = []
+            # For each octet, convert to int, then to binary, remove '0b', and pad to 8 bits
+            for part in parts:
+                number = int(part)
+                binary_string = bin(number)
+                binary_string = binary_string[
+                                2:]  # this returns string with 0b at the start, so we proceed to remove the first 2 symbols
+                # Pad to 8 bits with leading zeroes
+                binary_string = binary_string.zfill(8)
+                binary_parts.append(binary_string)
+            # Join the four binary octets with dots
+            result = ".".join(binary_parts)
+            self.result_display.setText(result)
+        else:
+            self.result_display.setText("Invalid decimal notation!")
 
     def calculate(self):
+        """
+        Placeholder
+        """
         return
 
     def smallest_power_of_2(self, n):
+        """
+        Serves as a simple iterative way to get the closest higher power of 2 (finds the subnet)
+        """
         exponent = 0
         power = 1
         while power < n:
@@ -170,7 +253,6 @@ class IPCalculator(QMainWindow):
         cidr = 32 - exponent
         result = f"The subnet needed is /{cidr}. It can accommodate up to {potential_hosts} potential hosts."
         self.result_display.setText(str(result))
-        return
 
     def on_ip_input_changed(self):
         """
