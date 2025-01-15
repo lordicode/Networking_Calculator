@@ -118,11 +118,6 @@ class IPCalculator(QMainWindow):
         self.calculate_subnet_btn.clicked.connect(self.calculate_from_devices)
         self.ip_input.textChanged.connect(self.on_ip_input_changed)
 
-    def clean_copied_input(self, string):
-        # Accept input and remove newline characters directly
-        clean_string = string.replace('\n', '')
-        return clean_string
-
     def is_valid_ipv4(self, address):
         """
         Validates the IP address as all other calculations do not matter if the value entered is not allowed.
