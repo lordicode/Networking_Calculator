@@ -1,5 +1,5 @@
 import sys
-
+import os
 from PyQt5 import Qt
 from PyQt5.QtGui import QIcon, QPixmap, QPalette, QBrush
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QTabWidget, QHBoxLayout, QPushButton,
@@ -13,11 +13,18 @@ class IPCalculator(QMainWindow):
         self.setWindowTitle("Networking Calculator")
         self.setGeometry(100, 100, 800, 600)
 
+        # Get the base path for bundled files to use them with auto-py-to-exe
+        # This is a requirement if we want to see the media files show up correctly, like the background or icon
+        def resource_path(relative_path):
+            if hasattr(sys, '_MEIPASS'):
+                return os.path.join(sys._MEIPASS, relative_path)
+            return os.path.join(os.path.abspath("."), relative_path)
+
         # Adding icon to make the app look more professional
-        self.setWindowIcon(QIcon('algebra_icon.png'))
+        self.setWindowIcon(QIcon(resource_path('algebra_icon.png')))
 
         # This centers the background image
-        background = QPixmap('background_texture.jpg')
+        background = QPixmap(resource_path('background_texture.jpg'))
 
         # Dividing by 2 gives us the center point of both width and height
         x = (background.width() - self.width()) // 2
